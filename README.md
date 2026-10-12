@@ -218,7 +218,7 @@ solana program set-upgrade-authority <PROGRAM_ID> \
 
 ## Trust model
 
-Short version of what you have to trust today, and what the program enforces whatever the team does. The line-by-line detail is in [Custody and key details](#custody-and-key-details) under Architecture; the program is `programs/astroam-escrow/src/lib.rs`. Everything below is about the devnet deployment. A Squads multisig, a frozen upgrade authority, and a timelock are planned and **not deployed**.
+**Custody plan.** Before mainnet, the upgrade authority and the payee move to a 2-of-3 Squads multisig (Franco Durán, Ignacio Martín, Daniel Palermo). From that point no single team key controls the program or the funds. **Current status:** devnet only; one team key is both payee and upgrade authority today, and moving both to the Squads multisig is the next step (planned, not deployed). The line-by-line key detail is in [Custody and key details](#custody-and-key-details) under Architecture; the program is `programs/astroam-escrow/src/lib.rs`.
 
 ```mermaid
 flowchart LR
@@ -232,38 +232,35 @@ flowchart LR
 
 The API (`CONNECTIVITY_PROVIDER=citrus`) reads usage from Citrus and the meter signs the cumulative voucher. In the public demo the eSIM is a sample profile and Citrus is not called (see [What is real, and what is not](#what-is-real-and-what-is-not)). On-chain, only the program moves the vault.
 
-### 1. Who holds the keys today
+### 1. What the program already enforces
 
-- **Payee and upgrade authority:** one key, `9NMAvdKGJibTUFW4mWRfVd4sZRpLNo3fQCQMqdrXXV89`. It is the payee in the program config and the upgrade authority on the program data account. No Squads multisig exists yet.
-- **Meter key:** a separate key, `3WqaNhVVCCnabBLGA9YWviQHDvo6fTmX1Y9otcmsdB7k`, stored in the config at `initialize`. Its private key (`meter.json`) is not in the repo; the API needs it to sign vouchers.
+The operator is limited by the program itself, whatever the team does:
+
+- **The amount comes from a verified voucher.** `checkpoint`, `claim`, and `close` require the previous instruction to be an ed25519 verification, signed by the meter pubkey in the config, of the message `AstroAmEscrow:v1:close || program id || escrow id || amount`. The voucher binds the program id and the escrow id, so it does not replay on another escrow. Vouchers from the traveler, the session key, or the payee are rejected (`ERR_BAD_VOUCHER`).
+- **The deposit is the cap.** The cumulative amount must be at most the deposit (`ERR_AMOUNT_EXCEEDS`) and at least what was already claimed (`ERR_BELOW_CLAIMED`). The cap is per escrow; there is no program-wide maximum deposit in the code.
+- **The payee is fixed.** It is set at `initialize` and no instruction changes it. USDC leaves the vault only through `claim`, `close`, and `refund`, to the payee and the traveler.
+- **An attested amount cannot be lowered.** Amounts already claimed or checkpointed stay; `close` rejects an amount below the last checkpoint (`ERR_BELOW_ATTESTED`).
+- **Anyone can execute the timeout refund.** `refund` needs only a fee payer, no traveler or meter signature. It runs after `timeout` seconds from the last deposit, top-up, or claim (604800 s, 7 days, on this config). It pays `attested − claimed` to the payee and `deposit − attested` to the traveler, using the amount already stored.
+- **No operator field.** Anyone with SOL can pay the fees of `checkpoint`, `claim`, `close`, and `refund`.
+
+### 2. Every settlement is public and auditable
+
+The voucher is part of each `checkpoint`, `claim`, and `close` transaction, so the attested amount, the escrow, and the payee are visible on the Solana explorer. To audit a reading, compare it with the usage Citrus reports for that eSIM; the meter derives its number from the USD that Citrus charged (`docs/decisions/metering-with-provider.md`). The reconciliation job (`src/jobs/reconciliation.ts`) compares Citrus' charged amount against the funded wallet and records the drift; it is diagnostic only and does not read the chain. The program does not read carrier usage itself, and it has no on-chain dispute; the remedy for a bad reading is off-chain.
+
+The meter key is a separate signer (`3WqaNhVVCCnabBLGA9YWviQHDvo6fTmX1Y9otcmsdB7k`, stored in the config at `initialize`; its private key `meter.json` is not in the repo). Even if it leaked, an attacker could only sign amounts between what was already attested and the deposit of an open escrow, and those go to the configured payee, not to the attacker.
+
+### 3. The Squads custody plan
+
+Next step, planned and not yet deployed:
+
+- **Upgrade authority and payee to a 2-of-3 Squads multisig** (Franco Durán, Ignacio Martín, Daniel Palermo). Upgrading the program then needs 2 of 3 signers, and settled USDC goes to the multisig treasury.
+- **How it moves.** The upgrade authority moves with `solana program set-upgrade-authority` (commands in [Custody and key details](#custody-and-key-details)). The payee is fixed at `initialize` and there is no `set_payee`, so a multisig payee needs a new deployment, or a sweep of USDC the current payee already received.
+- **Planned after that:** freeze the upgrade authority or put upgrades behind a timelock, and rotate the meter key. There is no instruction to change the meter key, so rotation needs a new deployment or an upgrade. The multisig does not by itself make vouchers more truthful, and until upgrades are frozen or timelocked an upgrade can still change the program's rules, with 2 of 3 signers.
+
+### Today on devnet
+
+- **Payee and upgrade authority:** one key, `9NMAvdKGJibTUFW4mWRfVd4sZRpLNo3fQCQMqdrXXV89`, the payee in the program config and the upgrade authority on the program data account.
 - The private keys are held by a team member, and Ignacio holds the deployer key (as stated in [Custody and key details](#custody-and-key-details)).
-- The program has no operator field. Anyone with SOL can pay the fees of `checkpoint`, `claim`, `close`, and `refund`.
-
-### 2. If the meter key leaks, and how to audit an over-reported reading
-
-What an attacker holding the meter key can do: sign a voucher for any open escrow of this program and submit it (the voucher binds the program id and escrow id, so it does not replay on another escrow). The amount can be anything between what was already attested and the deposit. It cannot name a recipient, because the payee is fixed at `initialize` and no instruction changes it. So the damage is bounded: a traveler can lose up to the deposit of an open escrow, paid to the configured payee, not to the attacker. Amounts already claimed or checkpointed cannot be lowered. The program does not read carrier usage, so it cannot tell a true reading from a false one. There is no instruction to change the meter key; a rotation needs a new deployment or an upgrade.
-
-How to audit a reading that over-reports:
-
-1. The signed message `AstroAmEscrow:v1:close || program id || escrow id || amount` is part of the `checkpoint`, `claim`, and `close` transactions, so the attested amount is public on the explorer.
-2. Compare it with the usage Citrus reports for that eSIM. The meter derives its number from the USD that Citrus charged (`docs/decisions/metering-with-provider.md`). We trust the provider's numbers there.
-3. The reconciliation job (`src/jobs/reconciliation.ts`) compares Citrus' charged amount against the funded wallet and records the drift. It is diagnostic only and does not read the chain, so it does not by itself flag an over-reporting voucher.
-4. An attested amount that is not backed by Citrus usage is evidence that the meter key was misused. The program offers no on-chain dispute; the remedy is off-chain.
-
-### 3. Limits the program enforces
-
-- **Cap at the deposit.** The cumulative amount must be at most the deposit (`ERR_AMOUNT_EXCEEDS`) and at least what was already claimed (`ERR_BELOW_CLAIMED`). `close` also rejects an amount below the last checkpoint (`ERR_BELOW_ATTESTED`). There is no program-wide maximum deposit in the code; the cap is per escrow.
-- **Public ed25519 vouchers.** `checkpoint`, `claim`, and `close` require the previous instruction to be an ed25519 verification, signed by the meter pubkey in the config, of the voucher message above. Vouchers from the traveler, the session key, or the payee are rejected (`ERR_BAD_VOUCHER`).
-- **Timeout anyone can execute.** `refund` needs only a fee payer, no traveler or meter signature. It runs after `timeout` seconds from the last deposit, top-up, or claim (604800 s, 7 days, on this config). It pays `attested − claimed` to the payee and `deposit − attested` to the traveler, using the amount already stored.
-- **Fixed destinations.** USDC leaves the vault only through `claim`, `close`, and `refund`, to the payee and the traveler.
-
-### 4. What the Squads multisig would change
-
-Planned, not done:
-
-- The upgrade authority and the payee would move to a 2-of-3 Squads multisig (Franco Durán, Ignacio Martín, Daniel Palermo). Upgrading the program would then need 2 of 3 signers, and settled USDC would go to the multisig treasury.
-- The payee is fixed at `initialize` and there is no `set_payee`, so a multisig payee needs a new deployment, or a sweep of USDC the current payee already received. The upgrade authority alone moves with `solana program set-upgrade-authority` (commands in [Custody and key details](#custody-and-key-details)).
-- It would **not** change the meter key, which stays a separate signer and still needs a new deployment or an upgrade to rotate. It would not make the vouchers more truthful. And an upgrade can still change the program's rules until upgrades are frozen or put behind a timelock, which is only "consider before mainnet".
 
 ## Try it in 5 minutes
 
