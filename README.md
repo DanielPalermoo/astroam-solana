@@ -450,6 +450,8 @@ Money and byte counts are stored as digit strings. Usage entries are written onl
 
 Who buys, through which channel, at what price and margin: [docs/go-to-market.md](docs/go-to-market.md). Validation so far: that price comparison, 10 interviews with travelers from Jujuy (2026-10-10), and messages to two Jujuy travel agencies that have not answered yet. Notes, counts, and limits: [docs/validation.md](docs/validation.md). In short, 5 of 10 skipped mobile data abroad and relied on Wi-Fi, 3 of 10 left part of a pack unused, and 4 of 10 already hold digital dollars (in Lemon, Belo, or Binance, not a Solana wallet). No traveler has deposited yet.
 
+> Note: `docs/validation.md` has been pseudonymized (Traveler 1–10, age ranges). The originals and consent records are kept outside this repo. Earlier commits may still contain data from before the pseudonymization.
+
 The USDC-per-GB figures below are the go-to-market rates: reseller cost of the cheapest network, times 1.5 (`MARKUP_BPS=15000`). Those costs were read on 7 October 2026. The card, roaming, and retail quotes were read on 8 October 2026, between 01:20 and 02:10 ART. The sample rates in the app (`pricePerMbUsdc`, Brazil 0.0025 USDC per MB) are examples for a demo with no live carrier. They are not this comparison.
 
 ### Target market

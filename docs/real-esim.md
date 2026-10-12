@@ -37,7 +37,6 @@ What this run shows, and what it does not:
 | Usage | The **Use 250 MB** button injects traffic. | `ENABLE_DEMO_TRAFFIC=false`. Usage is then what Citrus reports for that eSIM. |
 | Prices in the app | A fixed table of sample rates. | Read `GET /rates` from Citrus. Not built. |
 | USDC | Circle's devnet USDC. It has no value. | Mainnet. Out of scope for the hackathon. |
-| Demo video | Recorded with a stand-in wallet. | Record again with Phantom on devnet. |
 | Collected USDC to dollars | Nothing moves. | A Bridge account, or a manual conversion each month. |
 | Withdrawal button on `/terms` | Stores the request in the browser only. | A real contact and a legal review. |
 
