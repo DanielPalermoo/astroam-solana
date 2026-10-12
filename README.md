@@ -22,6 +22,12 @@ Try the AstroAm flow (deposit, usage, close, refund) on Solana Devnet in under 5
 4. The mission page opens with sample eSIM details and traffic metering.
 5. Click **End Mission**: AstroAm attests consumed bytes with its meter key and settles the on-chain close, refunding unused USDC directly back to your wallet.
 
+## Demo video
+
+[![AstroAm demo on YouTube: deposit once, pay what you use, get the rest back](docs/demo/AstroAm-demo-thumbnail.jpg)](https://youtu.be/tX7weju0MBc)
+
+Watch on YouTube: [youtu.be/tX7weju0MBc](https://youtu.be/tX7weju0MBc). Also in the repo: [`docs/demo/AstroAm-demo-EN.mp4`](docs/demo/AstroAm-demo-EN.mp4) (1:58, English subtitles burned in; also as [`.srt`](docs/demo/AstroAm-demo-EN.srt)). Recorded on the deployed app against Solana devnet with a real wallet (Solflare): a 2 USDC deposit, two clicks of **Use 250 MB** (demo traffic on a sample eSIM), and one close that paid 1.25 USDC and sent 0.75 USDC back. The deposit and the close are opened in the Solana Explorer. It ends with the [2026-10-09 run](docs/real-esim.md#run-of-2026-10-09), the team's controlled run with a real Citrus eSIM (log with `isMock=false`, close `4z7z7gFi…`).
+
 ## Video pitch
 
 [![AstroAm pitch on YouTube: pay only for the data you use](docs/demo/AstroAm-pitch-thumbnail.jpg)](https://youtu.be/q7B5czCrMdw)
