@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import shipCtaSrc from '../assets/ship-night.png'
+import mascotSrc from '../assets/mascot.webp'
 
 export default function FinalCTA() {
   return (
@@ -24,11 +24,11 @@ export default function FinalCTA() {
       {/* Content */}
       <div className="max-w-3xl mx-auto flex flex-col items-center text-center gap-6 relative z-10">
 
-        {/* Floating ship */}
-        <div className="w-24 h-24 relative animate-float-ship launch-thrust transition-all duration-500">
+        {/* Floating satellite */}
+        <div className="w-36 h-36 sm:w-44 sm:h-44 relative animate-float-ship launch-thrust transition-all duration-500">
           <img
-            src={shipCtaSrc}
-            alt="AstroAm ship"
+            src={mascotSrc}
+            alt="AstroAm satellite"
             className="w-full h-full object-contain drop-shadow-[0_0_26px_rgba(123,92,255,0.7)]"
           />
         </div>
@@ -57,7 +57,7 @@ export default function FinalCTA() {
             to="/mission/new"
             className="px-10 py-4 rounded-full bg-primaryviolet text-white font-sans text-base font-bold tracking-wider uppercase shadow-[0_0_30px_rgba(123,92,255,0.6)] hover:bg-primaryviolet-hover hover:scale-105 hover:shadow-[0_0_44px_rgba(123,92,255,0.8)] active:scale-95 transition-all duration-200 flex items-center gap-3"
           >
-            <span className="material-symbols-outlined text-xl">rocket_launch</span>
+            <span className="material-symbols-outlined notranslate text-xl">rocket_launch</span>
             <span>START YOUR MISSION</span>
           </Link>
         </div>

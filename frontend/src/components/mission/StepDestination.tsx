@@ -46,7 +46,7 @@ export default function StepDestination({ selected, onSelect }: Props) {
                   <span className="text-4xl">{dest.flag}</span>
                   {isSelected && (
                     <span className="w-5 h-5 rounded-full bg-primaryviolet flex items-center justify-center">
-                      <span className="material-symbols-outlined text-white text-sm">check</span>
+                      <span className="material-symbols-outlined notranslate text-white text-sm">check</span>
                     </span>
                   )}
                 </div>

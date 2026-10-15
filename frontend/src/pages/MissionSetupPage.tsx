@@ -174,7 +174,7 @@ export default function MissionSetupPage() {
       {!isDemoMode && backendError && (
         <div role="alert" className="mb-6 p-6 bg-cardbg glass rounded-3xl border border-alerta/40">
           <div className="flex items-center gap-3 text-alerta mb-3">
-            <span className="material-symbols-outlined text-2xl">cloud_off</span>
+            <span className="material-symbols-outlined notranslate text-2xl">cloud_off</span>
             <h2 className="font-mono text-sm font-bold uppercase tracking-wider">[ SERVER UNAVAILABLE ]</h2>
           </div>
           <p className="font-sans text-sm text-textsecondary mb-4 leading-relaxed">{backendError}</p>
@@ -183,7 +183,7 @@ export default function MissionSetupPage() {
             onClick={() => void retryBackend()}
             className="w-full sm:w-auto px-6 py-3 rounded-full bg-primaryviolet text-white font-sans font-semibold text-xs uppercase tracking-wider hover:bg-primaryviolet-hover transition-all flex items-center justify-center gap-2 min-h-[44px]"
           >
-            <span className="material-symbols-outlined text-sm">refresh</span>
+            <span className="material-symbols-outlined notranslate text-sm">refresh</span>
             RETRY
           </button>
         </div>
@@ -321,7 +321,7 @@ export default function MissionSetupPage() {
                     onClick={() => void handleConfirmPaymentSubmit()}
                     className="w-full px-6 py-3.5 rounded-full bg-tealbrand text-[#04161A] font-sans text-sm font-bold uppercase tracking-wider shadow-[0_0_22px_rgba(47,208,221,0.5)] hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2 min-h-[48px]"
                   >
-                    <span className={`material-symbols-outlined text-base ${paymentValidating ? 'animate-spin' : ''}`}>
+                    <span className={`material-symbols-outlined notranslate text-base ${paymentValidating ? 'animate-spin' : ''}`}>
                       {paymentValidating ? 'refresh' : 'check_circle'}
                     </span>
                     SIMULATE DEPOSIT (DEMO MODE)
@@ -362,7 +362,7 @@ export default function MissionSetupPage() {
             className="flex-1 sm:flex-none px-8 py-3.5 rounded-full bg-primaryviolet text-white font-sans font-bold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(123,92,255,0.5)] hover:bg-primaryviolet-hover hover:-translate-y-0.5 disabled:opacity-40 disabled:cursor-not-allowed disabled:translate-y-0 disabled:shadow-none transition-all flex items-center justify-center gap-2 min-h-[48px]"
           >
             CONTINUE
-            <span className="material-symbols-outlined text-base">arrow_forward</span>
+            <span className="material-symbols-outlined notranslate text-base">arrow_forward</span>
           </button>
         </div>
       )}

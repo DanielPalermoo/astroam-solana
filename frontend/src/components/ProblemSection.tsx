@@ -33,7 +33,7 @@ export default function ProblemSection() {
         {/* Section title */}
         <div className="max-w-3xl flex flex-col gap-3">
           <div className="inline-flex items-center gap-2 font-mono text-xs font-bold text-alerta tracking-widest uppercase">
-            <span className="material-symbols-outlined text-sm">warning</span>
+            <span className="material-symbols-outlined notranslate text-sm">warning</span>
             ANOMALY ZONE DETECTED
           </div>
           <h2 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight text-textprimary leading-tight">
@@ -54,7 +54,7 @@ export default function ProblemSection() {
             >
               <div className="flex flex-col gap-4">
                 <div className="w-14 h-14 rounded-2xl bg-primaryviolet-light border border-primaryviolet/30 flex items-center justify-center text-[#B9A6FF]">
-                  <span className={`material-symbols-outlined text-2xl transition-transform ${o.iconClass}`}>{o.icon}</span>
+                  <span className={`material-symbols-outlined notranslate text-2xl transition-transform ${o.iconClass}`}>{o.icon}</span>
                 </div>
                 <div className="flex flex-col gap-2">
                   <span className="font-mono text-xs font-bold text-textsecondary tracking-wider">{o.number}</span>
@@ -65,7 +65,7 @@ export default function ProblemSection() {
                 </div>
               </div>
               <div className="pt-6 mt-6 border-t border-cardborder font-mono text-xs text-alerta font-medium flex items-center gap-1.5">
-                <span className="material-symbols-outlined text-base">close</span>
+                <span className="material-symbols-outlined notranslate text-base">close</span>
                 {o.penalty}
               </div>
             </div>

@@ -212,7 +212,7 @@ export default function Reel<T>({
             onClick={() => go(k - 1)}
             className="reel-arrow w-11 h-11 rounded-full border border-cardborder bg-cardbg text-textprimary flex items-center justify-center disabled:opacity-40"
           >
-            <span className="material-symbols-outlined text-xl">chevron_left</span>
+            <span className="material-symbols-outlined notranslate text-xl">chevron_left</span>
           </button>
           <span className="font-mono text-xs text-textsecondary tabular-nums min-w-[52px] text-center" aria-live="polite">
             {String(k + 1).padStart(2, '0')} / {String(n).padStart(2, '0')}
@@ -224,7 +224,7 @@ export default function Reel<T>({
             onClick={() => go(k + 1)}
             className="reel-arrow w-11 h-11 rounded-full border border-cardborder bg-cardbg text-textprimary flex items-center justify-center disabled:opacity-40"
           >
-            <span className="material-symbols-outlined text-xl">chevron_right</span>
+            <span className="material-symbols-outlined notranslate text-xl">chevron_right</span>
           </button>
         </div>
       )}

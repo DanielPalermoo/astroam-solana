@@ -1,4 +1,4 @@
-import shipSrc from '../assets/ship-night.png'
+import mascotSrc from '../assets/mascot-sm.webp'
 
 /** The orbital mission card from the Stellar-era hero: home → Brazil, the ship riding the orbit. */
 export default function MissionOrbitCard() {
@@ -58,12 +58,12 @@ export default function MissionOrbitCard() {
           </g>
         </svg>
 
-        {/* Floating ship */}
+        {/* Floating satellite */}
         <div className="absolute left-[44%] top-[38%] -translate-x-1/2 -translate-y-1/2 z-20 flex flex-col items-center">
           <div className="w-24 h-24 relative animate-float-ship launch-thrust transition-all duration-300 cursor-pointer">
             <img
-              src={shipSrc}
-              alt="AstroAm ship"
+              src={mascotSrc}
+              alt="AstroAm satellite"
               className="w-full h-full object-contain drop-shadow-[0_0_22px_rgba(123,92,255,0.7)]"
             />
             {/* +1 MB badge */}
@@ -78,7 +78,7 @@ export default function MissionOrbitCard() {
       <div className="grid grid-cols-2 gap-3 pt-2">
         <div className="p-3.5 rounded-2xl bg-warmneutral border border-cardborder">
           <div className="flex items-center gap-1.5 text-textsecondary font-mono text-[11px] uppercase font-semibold">
-            <span className="material-symbols-outlined text-sm text-[#B9A6FF]">account_balance_wallet</span>
+            <span className="material-symbols-outlined notranslate text-sm text-[#B9A6FF]">account_balance_wallet</span>
             FUEL
           </div>
           <div className="font-display text-2xl font-bold text-textprimary mt-1">
@@ -87,7 +87,7 @@ export default function MissionOrbitCard() {
         </div>
         <div className="p-3.5 rounded-2xl bg-warmneutral border border-cardborder">
           <div className="flex items-center gap-1.5 text-textsecondary font-mono text-[11px] uppercase font-semibold">
-            <span className="material-symbols-outlined text-sm text-tealbrand">wifi_tethering</span>
+            <span className="material-symbols-outlined notranslate text-sm text-tealbrand">wifi_tethering</span>
             DATA
           </div>
           <div className="font-display text-2xl font-bold text-textprimary mt-1">

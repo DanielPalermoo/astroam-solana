@@ -62,7 +62,7 @@ export default function WalletDeposit({ missionId, plan, method = 'deposit', onD
       </p>
 
       <button type="button" onClick={() => void pay()} disabled={step !== null} className="w-full py-3.5 rounded-full bg-primaryviolet text-white font-sans font-bold text-sm uppercase tracking-wider shadow-[0_0_24px_rgba(123,92,255,0.55)] hover:bg-primaryviolet-hover disabled:opacity-50 transition-all flex items-center justify-center gap-2 min-h-[48px]">
-        <span className="material-symbols-outlined text-[20px]">account_balance_wallet</span>
+        <span className="material-symbols-outlined notranslate text-[20px]">account_balance_wallet</span>
         {step ? STEP_LABEL[step] : label}
       </button>
 
