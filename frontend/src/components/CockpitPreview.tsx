@@ -101,7 +101,7 @@ export default function CockpitPreview() {
               {/* Copilot */}
               <div className="p-6 rounded-2xl bg-primaryviolet-light border border-primaryviolet/30 flex flex-col gap-2.5 relative">
                 <div className="flex items-center gap-2 text-[#B9A6FF] font-mono text-xs font-bold tracking-wider uppercase">
-                  <span className="material-symbols-outlined text-base">smart_toy</span>
+                  <span className="material-symbols-outlined notranslate text-base">smart_toy</span>
                   BUDGET ASSISTANT // RULES
                 </div>
                 <p className="text-sm text-textprimary italic leading-relaxed">

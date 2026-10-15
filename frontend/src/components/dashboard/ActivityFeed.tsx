@@ -17,7 +17,7 @@ export default function ActivityFeed({ events, networkLabel }: Props) {
   if (events.length === 0) {
     return (
       <div className="flex flex-col items-center gap-3 py-10 text-center">
-        <span className="material-symbols-outlined text-3xl text-textsecondary/40">receipt_long</span>
+        <span className="material-symbols-outlined notranslate text-3xl text-textsecondary/40">receipt_long</span>
         <p className="font-mono text-xs font-bold text-textsecondary/60 uppercase tracking-widest">No activity yet</p>
         <p className="text-xs text-textsecondary/50">Use some data to see the micropayments</p>
       </div>
@@ -37,7 +37,7 @@ export default function ActivityFeed({ events, networkLabel }: Props) {
           >
             {/* Icon */}
             <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${isTopup ? 'bg-tealbrand/15' : 'bg-primaryviolet-light'}`}>
-              <span className={`material-symbols-outlined text-sm ${isTopup ? 'text-tealbrand' : 'text-[#B9A6FF]'}`}>
+              <span className={`material-symbols-outlined notranslate text-sm ${isTopup ? 'text-tealbrand' : 'text-[#B9A6FF]'}`}>
                 {isTopup ? 'add_circle' : 'bolt'}
               </span>
             </div>

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import shipSrc from '../assets/ship-night.png'
+import mascotSrc from '../assets/mascot-sm.webp'
 import MobileAppShell from '../components/MobileAppShell'
 import ActivityFeed from '../components/dashboard/ActivityFeed'
 import TopUpModal from '../components/dashboard/TopUpModal'
@@ -155,7 +155,7 @@ export default function ActiveMissionPage() {
                     onClick={() => void handleCompleteSubmit()}
                     className="flex-1 py-3 rounded-full bg-[#C8323F] text-white font-sans font-bold text-xs uppercase tracking-wider shadow-[0_0_20px_rgba(255,107,122,0.45)] hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-1.5 min-h-[44px]"
                   >
-                    {actionLoading && <span className="material-symbols-outlined text-sm animate-spin">refresh</span>}
+                    {actionLoading && <span className="material-symbols-outlined notranslate text-sm animate-spin">refresh</span>}
                     END MISSION
                   </button>
                 </div>
@@ -163,7 +163,7 @@ export default function ActiveMissionPage() {
             ) : (
               <div className="flex flex-col gap-4 font-mono text-xs">
                 <div className="flex items-center gap-2 text-tealbrand">
-                  <span className="material-symbols-outlined text-2xl">task_alt</span>
+                  <span className="material-symbols-outlined notranslate text-2xl">task_alt</span>
                   <h4 id="finish-title" className="font-bold text-sm uppercase">
                     {finishResult.status === 'completed' ? 'MISSION SETTLED' : 'REFUND QUOTE'}
                   </h4>
@@ -282,7 +282,7 @@ export default function ActiveMissionPage() {
         {meterAttests && !isCompleted && (
           <div className="flex items-center justify-between gap-3 rounded-xl border border-online/30 bg-online/10 p-3">
             <span className="flex items-center gap-2 text-xs text-textsecondary">
-              <span className="material-symbols-outlined text-base text-online">verified_user</span>
+              <span className="material-symbols-outlined notranslate text-base text-online">verified_user</span>
               Attested by AstroAm's meter
             </span>
             <span className="font-mono text-sm font-bold text-online">{fmtUsdc(authorizedUsdc ?? 0, 2)} USDC</span>
@@ -307,7 +307,7 @@ export default function ActiveMissionPage() {
             onClick={() => setShowTopUp(true)}
             className="py-3.5 px-4 rounded-2xl bg-primaryviolet text-white font-sans font-bold text-xs uppercase tracking-wider shadow-[0_0_22px_rgba(123,92,255,0.5)] hover:bg-primaryviolet-hover transition-all flex items-center justify-center gap-2 min-h-[48px]"
           >
-            <span className="material-symbols-outlined text-base">add_circle</span>
+            <span className="material-symbols-outlined notranslate text-base">add_circle</span>
             TOP UP
           </button>
 
@@ -321,7 +321,7 @@ export default function ActiveMissionPage() {
                 : 'border-amber-400/70 bg-amber-400/10 text-amber-300 hover:bg-amber-400/20'
             }`}
           >
-            <span className={`material-symbols-outlined text-base ${actionLoading ? 'animate-spin' : ''}`}>
+            <span className={`material-symbols-outlined notranslate text-base ${actionLoading ? 'animate-spin' : ''}`}>
               {actionLoading ? 'refresh' : isPaused ? 'play_circle' : 'pause_circle'}
             </span>
             {isPaused ? 'RESUME' : 'PAUSE DATA'}
@@ -332,7 +332,7 @@ export default function ActiveMissionPage() {
             onClick={() => navigate('/mission/esim')}
             className="py-3.5 px-4 rounded-2xl border border-cardborder bg-cardbg text-textprimary font-sans font-bold text-xs uppercase tracking-wider hover:border-primaryviolet/50 transition-all flex items-center justify-center gap-2 min-h-[48px]"
           >
-            <span className="material-symbols-outlined text-base">qr_code_2</span>
+            <span className="material-symbols-outlined notranslate text-base">qr_code_2</span>
             VIEW eSIM
           </button>
 
@@ -342,7 +342,7 @@ export default function ActiveMissionPage() {
             onClick={() => void handleSimulate()}
             className="py-3.5 px-4 rounded-2xl border border-tealbrand/40 bg-tealbrand/10 text-tealbrand font-sans font-bold text-xs uppercase tracking-wider hover:bg-tealbrand/20 hover:shadow-[0_0_18px_rgba(47,208,221,0.35)] disabled:opacity-40 transition-all flex items-center justify-center gap-2 min-h-[48px]"
           >
-            <span className="material-symbols-outlined text-base">bolt</span>
+            <span className="material-symbols-outlined notranslate text-base">bolt</span>
             USE {DEMO_TRAFFIC_MB} MB
           </button>}
         </div>
@@ -365,12 +365,12 @@ export default function ActiveMissionPage() {
       {/* 5. Copilot */}
       <div className="p-5 rounded-2xl bg-primaryviolet-light border border-primaryviolet/30 flex flex-col gap-3 mb-6">
         <div className="flex items-center gap-2 text-[#B9A6FF] font-mono text-xs font-bold tracking-wider uppercase">
-          <span className="material-symbols-outlined text-base">smart_toy</span>
+          <span className="material-symbols-outlined notranslate text-base">smart_toy</span>
           BUDGET ASSISTANT
         </div>
         <div className="flex items-start gap-3">
-          <div className={`w-10 h-10 shrink-0 animate-float-ship ${flash ? 'scale-125' : ''} transition-transform`}>
-            <img src={shipSrc} alt="" className="w-full h-full object-contain drop-shadow-[0_0_12px_rgba(123,92,255,0.7)]" />
+          <div className={`w-12 h-12 shrink-0 animate-float-ship ${flash ? 'scale-125' : ''} transition-transform`}>
+            <img src={mascotSrc} alt="" className="w-full h-full object-contain drop-shadow-[0_0_12px_rgba(123,92,255,0.7)]" />
           </div>
           <p className="text-xs text-textprimary italic leading-relaxed">
             {isCompleted
@@ -411,7 +411,7 @@ export default function ActiveMissionPage() {
           className="w-full min-h-[44px] flex items-center justify-between font-mono text-xs font-bold text-textsecondary uppercase tracking-widest hover:text-white transition-colors"
         >
           <span>TECHNICAL DETAILS</span>
-          <span className="material-symbols-outlined text-base">{showTechDetails ? 'expand_less' : 'expand_more'}</span>
+          <span className="material-symbols-outlined notranslate text-base">{showTechDetails ? 'expand_less' : 'expand_more'}</span>
         </button>
 
         {showTechDetails && (
@@ -442,7 +442,7 @@ export default function ActiveMissionPage() {
             }}
             className="w-full sm:w-auto px-8 py-3.5 rounded-full border border-alerta/40 bg-alerta/5 text-alerta font-sans font-bold text-xs uppercase tracking-wider hover:bg-alerta/15 transition-all flex items-center justify-center gap-2 min-h-[48px]"
           >
-            <span className="material-symbols-outlined text-base">flag</span>
+            <span className="material-symbols-outlined notranslate text-base">flag</span>
             END MISSION AND GET THE REST BACK
           </button>
           <button
@@ -464,7 +464,7 @@ export default function ActiveMissionPage() {
             onClick={() => navigate('/mission/new')}
             className="flex-1 py-3.5 rounded-full bg-primaryviolet text-white font-sans font-bold text-xs uppercase tracking-wider shadow-[0_0_22px_rgba(123,92,255,0.5)] hover:bg-primaryviolet-hover transition-all min-h-[48px] flex items-center justify-center gap-2"
           >
-            <span className="material-symbols-outlined text-base">rocket_launch</span>
+            <span className="material-symbols-outlined notranslate text-base">rocket_launch</span>
             NEW MISSION
           </button>
           <button
@@ -484,7 +484,7 @@ function MetricCard({ label, value, icon, iconColor }: { label: string; value: s
   return (
     <div className={`p-4 rounded-2xl flex flex-col gap-1.5 hover:border-primaryviolet/50 transition-colors ${CARD}`}>
       <div className="flex items-center gap-1.5">
-        <span className={`material-symbols-outlined text-base ${iconColor}`}>{icon}</span>
+        <span className={`material-symbols-outlined notranslate text-base ${iconColor}`}>{icon}</span>
         <span className="font-mono text-[10px] font-bold text-textsecondary uppercase tracking-wider">{label}</span>
       </div>
       <span className="font-display text-base sm:text-lg font-bold text-textprimary leading-tight">{value}</span>

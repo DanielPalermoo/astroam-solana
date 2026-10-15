@@ -40,7 +40,7 @@ export default function Header() {
           >
             <span className="hidden sm:inline">START MISSION</span>
             <span className="sm:hidden">START</span>
-            <span className="material-symbols-outlined text-sm">rocket_launch</span>
+            <span className="material-symbols-outlined notranslate text-sm">rocket_launch</span>
           </Link>
         </div>
       </div>

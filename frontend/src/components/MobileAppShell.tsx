@@ -39,7 +39,7 @@ export default function MobileAppShell({
                 className="w-11 h-11 rounded-full bg-cardbg border border-cardborder flex items-center justify-center text-textsecondary hover:text-white hover:border-primaryviolet/50 transition-all shrink-0"
                 aria-label="Go back"
               >
-                <span className="material-symbols-outlined text-lg">arrow_back</span>
+                <span className="material-symbols-outlined notranslate text-lg">arrow_back</span>
               </button>
             )}
             <a href="/" className="flex items-center gap-2 py-2.5 group shrink-0">

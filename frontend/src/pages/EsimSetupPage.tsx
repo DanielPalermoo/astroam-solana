@@ -17,7 +17,7 @@ export default function EsimSetupPage() {
     return (
       <div className="min-h-screen bg-bglight flex flex-col items-center justify-center p-6 text-center">
         <div className="bg-cardbg glass p-8 rounded-3xl border border-cardborder max-w-md">
-          <span className="material-symbols-outlined text-4xl text-alerta mb-3">warning</span>
+          <span className="material-symbols-outlined notranslate text-4xl text-alerta mb-3">warning</span>
           <h2 className="font-display text-xl font-bold text-textprimary mb-2">No active mission</h2>
           <p className="font-sans text-sm text-textsecondary mb-6">
             Create a new mission to see a sample test eSIM. A live provider is not connected.
@@ -105,7 +105,7 @@ export default function EsimSetupPage() {
             />
             {isDemo && (
               <div className="absolute inset-0 bg-[#0A0B1F]/90 backdrop-blur-sm rounded-2xl flex flex-col items-center justify-center p-3 text-center">
-                <span className="material-symbols-outlined text-tealbrand text-3xl mb-1">qr_code_2</span>
+                <span className="material-symbols-outlined notranslate text-tealbrand text-3xl mb-1">qr_code_2</span>
                 <span className="font-mono text-xs font-bold text-white uppercase tracking-wider">
                   SAMPLE TEST eSIM
                 </span>
@@ -126,7 +126,7 @@ export default function EsimSetupPage() {
               }}
               className="w-full py-3.5 px-4 mb-3 rounded-2xl bg-primaryviolet text-white font-sans font-bold text-xs uppercase tracking-wider hover:bg-primaryviolet-hover transition-all flex items-center justify-center gap-2 shadow-[0_0_22px_rgba(123,92,255,0.5)] min-h-[48px]"
             >
-              <span className="material-symbols-outlined text-base">auto_fix_high</span>
+              <span className="material-symbols-outlined notranslate text-base">auto_fix_high</span>
               SEE DEMO INSTALL
             </button>
           ) : (
@@ -137,7 +137,7 @@ export default function EsimSetupPage() {
                 rel="noreferrer"
                 className="w-full py-3.5 px-4 mb-3 rounded-2xl bg-primaryviolet text-white font-sans font-bold text-xs uppercase tracking-wider hover:bg-primaryviolet-hover transition-all flex items-center justify-center gap-2 shadow-[0_0_22px_rgba(123,92,255,0.5)] min-h-[48px]"
               >
-                <span className="material-symbols-outlined text-base">
+                <span className="material-symbols-outlined notranslate text-base">
                   {isIos ? 'phone_iphone' : isAndroid ? 'phone_android' : 'qr_code'}
                 </span>
                 {isIos
@@ -174,7 +174,7 @@ export default function EsimSetupPage() {
                   onClick={() => copyToClipboard(esim.lpaString, 'lpa')}
                   className="px-3 py-2 rounded-xl bg-cardbg border border-cardborder text-[#B9A6FF] hover:border-primaryviolet/60 font-mono text-xs font-semibold flex items-center gap-1 transition-all shrink-0 min-h-[44px]"
                 >
-                  <span className="material-symbols-outlined text-sm">
+                  <span className="material-symbols-outlined notranslate text-sm">
                     {copiedLpa ? 'check' : 'content_copy'}
                   </span>
                   {copiedLpa ? 'COPIED' : 'COPY'}
@@ -194,7 +194,7 @@ export default function EsimSetupPage() {
                   onClick={() => copyToClipboard(esim.iccid, 'iccid')}
                   className="px-3 py-2 rounded-xl bg-cardbg border border-cardborder text-[#B9A6FF] hover:border-primaryviolet/60 font-mono text-xs font-semibold flex items-center gap-1 transition-all shrink-0 min-h-[44px]"
                 >
-                  <span className="material-symbols-outlined text-sm">
+                  <span className="material-symbols-outlined notranslate text-sm">
                     {copiedIccid ? 'check' : 'content_copy'}
                   </span>
                   {copiedIccid ? 'COPIED' : 'COPY'}
@@ -281,7 +281,7 @@ export default function EsimSetupPage() {
       {/* Action bar */}
       <div className="mt-8 flex flex-col sm:flex-row items-center justify-between gap-4 bg-cardbg glass p-4 sm:p-6 rounded-3xl border border-cardborder">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-online text-2xl">verified</span>
+          <span className="material-symbols-outlined notranslate text-online text-2xl">verified</span>
           <div>
             <p className="font-sans font-bold text-sm text-textprimary">
               {isDemo ? 'Sample test eSIM. No carrier is connected yet.' : 'eSIM profile from the connected provider.'}
@@ -299,7 +299,7 @@ export default function EsimSetupPage() {
           className="w-full sm:w-auto px-8 py-3.5 rounded-full bg-primaryviolet text-white font-sans font-semibold text-xs uppercase tracking-wider hover:bg-primaryviolet-hover transition-all shadow-[0_0_22px_rgba(123,92,255,0.5)] hover:-translate-y-0.5 flex items-center justify-center gap-2 min-h-[48px]"
         >
           I INSTALLED IT // GO TO DASHBOARD
-          <span className="material-symbols-outlined text-base">arrow_forward</span>
+          <span className="material-symbols-outlined notranslate text-base">arrow_forward</span>
         </button>
       </div>
     </MobileAppShell>

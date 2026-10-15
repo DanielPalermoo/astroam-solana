@@ -60,7 +60,7 @@ export default function TopUpModal({ onClose }: Props) {
             aria-label="Close"
             className="w-11 h-11 rounded-full bg-warmneutral border border-cardborder flex items-center justify-center hover:border-primaryviolet/50 transition-colors"
           >
-            <span className="material-symbols-outlined text-sm text-textsecondary">close</span>
+            <span className="material-symbols-outlined notranslate text-sm text-textsecondary">close</span>
           </button>
         </div>
 
@@ -111,7 +111,7 @@ export default function TopUpModal({ onClose }: Props) {
 
             {/* Badge */}
             <div className="flex items-center gap-2 p-3 rounded-xl bg-primaryviolet-light border border-primaryviolet/30">
-              <span className="material-symbols-outlined text-sm text-[#B9A6FF]">hub</span>
+              <span className="material-symbols-outlined notranslate text-sm text-[#B9A6FF]">hub</span>
               <p className="font-mono text-[10px] font-bold text-[#B9A6FF] tracking-wider">
                 {simulated ? 'DEMO MODE' : caps?.solanaProgramId ? 'DEPOSIT ON SOLANA DEVNET' : 'PROGRAM NOT SET'}
               </p>
@@ -123,7 +123,7 @@ export default function TopUpModal({ onClose }: Props) {
               onClick={() => void handleStartTopUp()}
               className="w-full py-3.5 rounded-full bg-primaryviolet text-white font-sans font-bold text-sm uppercase tracking-wider shadow-[0_0_24px_rgba(123,92,255,0.5)] hover:bg-primaryviolet-hover disabled:opacity-50 transition-all flex items-center justify-center gap-2"
             >
-              <span className="material-symbols-outlined text-base">add_circle</span>
+              <span className="material-symbols-outlined notranslate text-base">add_circle</span>
               {isDemoMode ? 'CONFIRM TOP-UP (DEMO)' : 'CONTINUE'}
             </button>
           </>
@@ -145,7 +145,7 @@ export default function TopUpModal({ onClose }: Props) {
             onClick={() => void handleConfirmTopUp()}
             className="w-full py-3 rounded-full bg-tealbrand text-[#04161A] font-bold text-xs uppercase tracking-wider shadow-[0_0_18px_rgba(47,208,221,0.45)] hover:opacity-90 disabled:opacity-50 transition-all flex items-center justify-center gap-2"
           >
-            <span className={`material-symbols-outlined text-sm ${actionLoading ? 'animate-spin' : ''}`}>{actionLoading ? 'refresh' : 'check_circle'}</span>
+            <span className={`material-symbols-outlined notranslate text-sm ${actionLoading ? 'animate-spin' : ''}`}>{actionLoading ? 'refresh' : 'check_circle'}</span>
             SIMULATE TOP-UP (DEMO MODE)
           </button>
         ) : (
