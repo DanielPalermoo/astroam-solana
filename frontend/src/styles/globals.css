@@ -13,6 +13,8 @@ html {
 
 html {
   color-scheme: dark;
+  /* Same as body, so a short page or an overscroll never shows white. */
+  @apply bg-bglight;
 }
 
 body {
@@ -129,8 +131,24 @@ input[type='date']::-webkit-calendar-picker-indicator {
   filter: invert(0.85);
 }
 
-/* ── Material Symbols icon utility ── */
+/* ── Material Symbols icon utility ──
+ * Served from this app, not from Google Fonts: the full font is about 1.1 MB, and
+ * while it loads (or when a blocker drops it) each icon shows its name as text,
+ * e.g. "rocket_launch". This file holds only the icons listed in
+ * material-symbols-outlined.icons.txt (about 19 KB). A new icon needs that list
+ * and the font regenerated: see the comment at the top of the list. */
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 100 700;
+  font-display: block;
+  src: url('../assets/fonts/material-symbols-outlined.woff2') format('woff2');
+}
+
 .material-symbols-outlined {
+  /* If the font is still missing, clip the ligature name to one icon cell. */
+  width: 1em;
+  overflow: hidden;
   font-family: 'Material Symbols Outlined';
   font-weight: normal;
   font-style: normal;

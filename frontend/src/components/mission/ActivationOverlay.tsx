@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import shipSrc from '../../assets/ship-night.png'
+import mascotSrc from '../../assets/mascot.webp'
 import StarfieldBackground from '../StarfieldBackground'
 import type { ActivationStep } from '../../types/mission'
 
@@ -62,8 +62,8 @@ export default function ActivationOverlay({ onComplete, paymentsSimulated = fals
 
       <div className="relative z-10 flex flex-col items-center gap-8 px-6 text-center max-w-sm w-full">
         {/* Floating ship */}
-        <div className={`w-28 h-28 animate-float-ship transition-all duration-700 ${done ? 'scale-110' : ''}`}>
-          <img src={shipSrc} alt="AstroAm ship" className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(123,92,255,0.75)]" />
+        <div className={`w-36 h-36 animate-float-ship transition-all duration-700 ${done ? 'scale-110' : ''}`}>
+          <img src={mascotSrc} alt="AstroAm satellite" className="w-full h-full object-contain drop-shadow-[0_0_30px_rgba(123,92,255,0.75)]" />
         </div>
 
         {/* Title */}
@@ -104,7 +104,7 @@ export default function ActivationOverlay({ onComplete, paymentsSimulated = fals
                 }`}
               >
                 {step.status === 'done' ? (
-                  <span className="material-symbols-outlined text-white text-sm">check</span>
+                  <span className="material-symbols-outlined notranslate text-white text-sm">check</span>
                 ) : step.status === 'running' ? (
                   <span className="w-2.5 h-2.5 rounded-full bg-primaryviolet animate-pulse" />
                 ) : (

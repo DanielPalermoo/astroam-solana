@@ -45,7 +45,7 @@ export default function WizardProgress({ current, labels }: Props) {
                   }`}
                 >
                   {done ? (
-                    <span className="material-symbols-outlined text-sm">check</span>
+                    <span className="material-symbols-outlined notranslate text-sm">check</span>
                   ) : (
                     `0${step}`
                   )}

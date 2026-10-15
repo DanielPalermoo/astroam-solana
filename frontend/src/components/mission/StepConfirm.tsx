@@ -47,13 +47,13 @@ export default function StepConfirm({ data, networkLabel, busy = false, onBack, 
       <div className="flex flex-wrap gap-3">
         {data.autoPauseAtLimit && (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-tealbrand/10 border border-tealbrand/30 font-mono text-[10px] font-bold text-tealbrand tracking-wider">
-            <span className="material-symbols-outlined text-sm">pause_circle</span>
+            <span className="material-symbols-outlined notranslate text-sm">pause_circle</span>
             AUTO-PAUSE ON
           </span>
         )}
         {data.alertAt20pct && (
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-starlight/10 border border-starlight/30 font-mono text-[10px] font-bold text-starlight tracking-wider">
-            <span className="material-symbols-outlined text-sm">notifications_active</span>
+            <span className="material-symbols-outlined notranslate text-sm">notifications_active</span>
             20% ALERT
           </span>
         )}
@@ -79,7 +79,7 @@ export default function StepConfirm({ data, networkLabel, busy = false, onBack, 
           disabled={busy}
           className="flex-1 py-3.5 rounded-full bg-primaryviolet text-white font-sans font-bold text-sm uppercase tracking-wider shadow-[0_0_24px_rgba(123,92,255,0.55)] hover:bg-primaryviolet-hover hover:shadow-[0_0_36px_rgba(123,92,255,0.75)] hover:-translate-y-0.5 disabled:opacity-60 disabled:translate-y-0 transition-all duration-200 flex items-center justify-center gap-2"
         >
-          <span className={`material-symbols-outlined text-base ${busy ? 'animate-spin' : ''}`}>{busy ? 'refresh' : 'rocket_launch'}</span>
+          <span className={`material-symbols-outlined notranslate text-base ${busy ? 'animate-spin' : ''}`}>{busy ? 'refresh' : 'rocket_launch'}</span>
           {busy ? 'PREPARING…' : 'CONFIRM AND LAUNCH'}
         </button>
       </div>

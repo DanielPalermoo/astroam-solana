@@ -52,7 +52,7 @@ export default function MobileBottomNav({ onActivityClick }: MobileBottomNavProp
           }`}
           aria-label="Go to mission"
         >
-          <span className="material-symbols-outlined text-xl mb-0.5">rocket_launch</span>
+          <span className="material-symbols-outlined notranslate text-xl mb-0.5">rocket_launch</span>
           <span className="font-sans text-[11px] uppercase tracking-wider">MISSION</span>
         </button>
 
@@ -67,7 +67,7 @@ export default function MobileBottomNav({ onActivityClick }: MobileBottomNavProp
           }`}
           aria-label="Go to eSIM"
         >
-          <span className="material-symbols-outlined text-xl mb-0.5">sim_card</span>
+          <span className="material-symbols-outlined notranslate text-xl mb-0.5">sim_card</span>
           <span className="font-sans text-[11px] uppercase tracking-wider">eSIM</span>
         </button>
 
@@ -78,7 +78,7 @@ export default function MobileBottomNav({ onActivityClick }: MobileBottomNavProp
           className="flex flex-col items-center justify-center min-w-[64px] min-h-[48px] py-1 px-3 rounded-2xl text-textsecondary hover:text-textprimary transition-all"
           aria-label="See activity"
         >
-          <span className="material-symbols-outlined text-xl mb-0.5">history</span>
+          <span className="material-symbols-outlined notranslate text-xl mb-0.5">history</span>
           <span className="font-sans text-[11px] uppercase tracking-wider">ACTIVITY</span>
         </button>
       </div>

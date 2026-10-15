@@ -57,7 +57,7 @@ export default function StepBudget({
       {/* Estimated data */}
       <div className="p-5 rounded-2xl bg-warmneutral border border-cardborder flex items-start sm:items-center gap-4">
         <div className="w-12 h-12 rounded-full bg-tealbrand/10 border border-tealbrand/20 flex items-center justify-center shrink-0 mt-0.5 sm:mt-0">
-          <span className="material-symbols-outlined text-tealbrand text-xl">wifi_tethering</span>
+          <span className="material-symbols-outlined notranslate text-tealbrand text-xl">wifi_tethering</span>
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-0.5">

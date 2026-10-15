@@ -92,7 +92,7 @@ export default function StepDuration({ startDate, endDate, onChange }: Props) {
       {/* Duration summary */}
       <div className="flex items-center gap-4 p-5 rounded-2xl bg-primaryviolet-light border border-primaryviolet/20">
         <div className="w-12 h-12 rounded-full bg-primaryviolet flex items-center justify-center shrink-0">
-          <span className="material-symbols-outlined text-white text-xl">calendar_month</span>
+          <span className="material-symbols-outlined notranslate text-white text-xl">calendar_month</span>
         </div>
         <div>
           <p className="font-display text-2xl font-bold text-textprimary">

@@ -54,7 +54,7 @@ export default function TechnologySection() {
                   {s.img ? (
                     <img src={s.img} alt={s.title} className="w-full h-full object-contain p-1.5" />
                   ) : (
-                    <span className={`material-symbols-outlined text-2xl ${s.color}`}>{s.icon}</span>
+                    <span className={`material-symbols-outlined notranslate text-2xl ${s.color}`}>{s.icon}</span>
                   )}
                 </div>
                 <span className={`font-mono text-[10px] font-bold uppercase tracking-wider ${stepColors[s.step]}`}>{s.step}</span>

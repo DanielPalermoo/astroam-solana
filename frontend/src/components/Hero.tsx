@@ -1,7 +1,6 @@
 import { Link } from 'react-router-dom'
-import shipSrc from '../assets/ship-night.png'
+import mascotSrc from '../assets/mascot.webp'
 import DotIcon from './dots/DotIcon'
-import DotLettering from './dots/DotLettering'
 import MissionOrbitCard from './MissionOrbitCard'
 import Reel from './reel/Reel'
 import type { Hot } from './dots/dotMatrix'
@@ -34,9 +33,9 @@ function ConceptCard({ c, active }: { c: Concept; active: boolean }) {
       </div>
       <div className="relative my-3 flex-1">
         {c.glyph ? (
-          <DotIcon glyph={c.glyph} hot={c.hot} active={active} />
+          <DotIcon glyph={c.glyph} hot={c.hot} active={active} cols={32} />
         ) : (
-          <img src={shipSrc} alt="" draggable={false} className="absolute inset-0 m-auto h-[78%] w-[78%] object-contain animate-float-ship drop-shadow-[0_0_24px_rgba(106,69,255,0.7)]" />
+          <img src={mascotSrc} alt="AstroAm satellite" draggable={false} className="absolute inset-0 m-auto h-[92%] w-[92%] object-contain animate-float-ship drop-shadow-[0_0_24px_rgba(106,69,255,0.7)]" />
         )}
       </div>
       <h3 className="font-display text-lg font-bold text-textprimary">{c.title}</h3>
@@ -48,11 +47,6 @@ function ConceptCard({ c, active }: { c: Concept; active: boolean }) {
 export default function Hero() {
   return (
     <section className="relative overflow-hidden px-6 pb-16 pt-6 md:px-12">
-      {/* Giant dot lettering behind the reel */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-[300px] sm:h-[440px]">
-        <DotLettering text="ASTROAM" />
-      </div>
-
       {/* The trip as a 3D reel */}
       <div className="relative mx-auto max-w-7xl">
         <Reel
@@ -65,7 +59,7 @@ export default function Hero() {
           renderCard={(c, { active }) => <ConceptCard c={c} active={active} />}
         />
         <p className="mt-4 text-center font-mono text-sm text-textsecondary">
-          Pay per MB. Nothing is charged <span className="rounded bg-textprimary px-1.5 py-0.5 text-[#070814]">unmeasured</span>.
+          Pay per MB. Nothing is charged <span className="font-semibold text-starlight">unless it is measured</span>.
         </p>
       </div>
 
@@ -94,7 +88,7 @@ export default function Hero() {
               className="flex items-center gap-2.5 rounded-full bg-primaryviolet px-8 py-3.5 font-sans text-sm font-semibold uppercase tracking-wider text-white shadow-[0_0_24px_rgba(106,69,255,0.55)] transition-[transform,box-shadow,background-color] duration-150 hover:bg-primaryviolet-hover active:scale-[0.97]"
             >
               <span>START MISSION</span>
-              <span className="material-symbols-outlined text-base">rocket_launch</span>
+              <span className="material-symbols-outlined notranslate text-base">rocket_launch</span>
             </Link>
             <a
               href="#how-it-works"
