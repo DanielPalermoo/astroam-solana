@@ -1,5 +1,7 @@
 import { Router, type Request, type Response, type NextFunction } from 'express'
 import type { MissionProductService } from '../services/MissionProductService.ts'
+import { WaitlistRepository } from '../persistence/WaitlistRepository.ts'
+import { waitlistRegisterSchema } from '../schemas/waitlist.ts'
 import {
   createMissionSchema,
   paymentConfirmationSchema,
@@ -39,10 +41,97 @@ export function cors(req: Request, res: Response, next: NextFunction): void {
   next()
 }
 
-export function createProductRouter(service: MissionProductService): Router {
+export function createWaitlistRouter(waitlistRepo?: WaitlistRepository): Router {
+  const router = Router()
+  const waitlist = waitlistRepo ?? new WaitlistRepository()
+  router.use(cors)
+
+  // 1. Register for Waitlist
+  router.post(['/waitlist', '/'], (req: Request, res: Response) => {
+    try {
+      const parsed = waitlistRegisterSchema.parse(req.body)
+
+      // Anti-bot Honeypot check: silently discard without saving to DB
+      if (parsed.honeypot && parsed.honeypot.trim().length > 0) {
+        res.status(200).json({
+          status: 'ok',
+          alreadyRegistered: false,
+          message: '¡Te has unido a la lista de espera con éxito!',
+        })
+        return
+      }
+
+      const result = waitlist.addEntry(parsed.email, parsed.source)
+      if (result.alreadyRegistered) {
+        res.status(200).json({
+          status: 'ok',
+          alreadyRegistered: true,
+          message: 'Ya estas a bordo!',
+        })
+        return
+      }
+
+      res.status(201).json({
+        status: 'ok',
+        alreadyRegistered: false,
+        message: '¡Te has unido a la lista de espera con éxito!',
+      })
+    } catch (err) {
+      res.status(400).json({
+        error: 'invalid_request',
+        message: err instanceof Error ? err.message : String(err),
+      })
+    }
+  })
+
+  // 2. Waitlist Count
+  router.get(['/waitlist/count', '/count'], (_req: Request, res: Response) => {
+    try {
+      const count = waitlist.getCount()
+      res.status(200).json({ count })
+    } catch (err) {
+      res.status(500).json({
+        error: 'internal_error',
+        message: err instanceof Error ? err.message : String(err),
+      })
+    }
+  })
+
+  // 3. Export Waitlist CSV
+  router.get(['/waitlist/export', '/export'], (req: Request, res: Response) => {
+    const adminSecret = process.env.WAITLIST_ADMIN_SECRET
+
+    let providedSecret: string | undefined
+    const authHeader = req.headers.authorization
+    if (authHeader) {
+      const match = authHeader.match(/^Bearer\s+(.+)$/i)
+      if (match) {
+        providedSecret = match[1].trim()
+      }
+    }
+    if (!providedSecret && typeof req.query.secret === 'string') {
+      providedSecret = req.query.secret.trim()
+    }
+
+    if (!adminSecret || !providedSecret || providedSecret !== adminSecret) {
+      res.status(401).json({ error: 'unauthorized', message: 'Unauthorized' })
+      return
+    }
+
+    const csv = waitlist.toCsv()
+    res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+    res.setHeader('Content-Disposition', 'attachment; filename="waitlist.csv"')
+    res.status(200).send(csv)
+  })
+
+  return router
+}
+
+export function createProductRouter(service: MissionProductService, waitlistRepo?: WaitlistRepository): Router {
   const router = Router()
 
   router.use(cors)
+  router.use(createWaitlistRouter(waitlistRepo))
 
   // Auth & Live Guard Middleware for mutable endpoints when live mode is active
   const requireAuthIfNeeded = (req: Request, res: Response, next: NextFunction) => {

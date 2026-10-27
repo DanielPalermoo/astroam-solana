@@ -7,6 +7,7 @@ import { createCitrusWebhooksRoute, type CitrusWebhooksRouteOptions } from "./ro
 import { cors, createProductRouter } from "../product/api/routes.ts";
 import { bootProductService } from "../product/runtime/product-boot.ts";
 import type { MissionProductService } from "../product/services/MissionProductService.ts";
+import type { WaitlistRepository } from "../product/persistence/WaitlistRepository.ts";
 
 export type CreateServerAppOptions = {
   /** Defaults to the service built from the environment (product-boot). */
@@ -17,6 +18,8 @@ export type CreateServerAppOptions = {
    * BEFORE the app-wide `express.json()`, so it sees the raw body for the
    * HMAC and the rest of the app is unaffected. */
   citrusWebhooks?: CitrusWebhooksRouteOptions;
+  /** Waitlist repository. */
+  waitlistRepo?: WaitlistRepository;
 };
 
 /** Any uncaught error answers JSON; a stack trace never reaches the client. */
@@ -69,7 +72,7 @@ export function createServerApp(options: CreateServerAppOptions = {}): Express {
     }
   });
 
-  app.use("/api", createProductRouter(productService));
+  app.use("/api", createProductRouter(productService, options.waitlistRepo));
 
   // Mounted last so Express's error dispatch picks it up for every route.
   app.use(jsonErrorHandler);
