@@ -47,7 +47,7 @@ export function createWaitlistRouter(waitlistRepo?: WaitlistRepository): Router 
   router.use(cors)
 
   // 1. Register for Waitlist
-  router.post(['/waitlist', '/'], (req: Request, res: Response) => {
+  router.post(['/waitlist', '/'], async (req: Request, res: Response) => {
     try {
       const parsed = waitlistRegisterSchema.parse(req.body)
 
@@ -61,7 +61,14 @@ export function createWaitlistRouter(waitlistRepo?: WaitlistRepository): Router 
         return
       }
 
-      const result = waitlist.addEntry(parsed.email, parsed.source)
+      const result = await waitlist.addEntry({
+        fullName: parsed.fullName,
+        phone: parsed.phone,
+        email: parsed.email,
+        countryOrigin: parsed.countryOrigin,
+        nextDestination: parsed.nextDestination,
+        source: parsed.source,
+      })
       if (result.alreadyRegistered) {
         res.status(200).json({
           status: 'ok',
@@ -85,9 +92,9 @@ export function createWaitlistRouter(waitlistRepo?: WaitlistRepository): Router 
   })
 
   // 2. Waitlist Count
-  router.get(['/waitlist/count', '/count'], (_req: Request, res: Response) => {
+  router.get(['/waitlist/count', '/count'], async (_req: Request, res: Response) => {
     try {
-      const count = waitlist.getCount()
+      const count = await waitlist.getCount()
       res.status(200).json({ count })
     } catch (err) {
       res.status(500).json({
@@ -98,7 +105,7 @@ export function createWaitlistRouter(waitlistRepo?: WaitlistRepository): Router 
   })
 
   // 3. Export Waitlist CSV
-  router.get(['/waitlist/export', '/export'], (req: Request, res: Response) => {
+  router.get(['/waitlist/export', '/export'], async (req: Request, res: Response) => {
     const adminSecret = process.env.WAITLIST_ADMIN_SECRET
 
     let providedSecret: string | undefined
@@ -118,10 +125,17 @@ export function createWaitlistRouter(waitlistRepo?: WaitlistRepository): Router 
       return
     }
 
-    const csv = waitlist.toCsv()
-    res.setHeader('Content-Type', 'text/csv; charset=utf-8')
-    res.setHeader('Content-Disposition', 'attachment; filename="waitlist.csv"')
-    res.status(200).send(csv)
+    try {
+      const csv = await waitlist.toCsv()
+      res.setHeader('Content-Type', 'text/csv; charset=utf-8')
+      res.setHeader('Content-Disposition', 'attachment; filename="waitlist.csv"')
+      res.status(200).send(csv)
+    } catch (err) {
+      res.status(500).json({
+        error: 'export_failed',
+        message: err instanceof Error ? err.message : String(err),
+      })
+    }
   })
 
   return router

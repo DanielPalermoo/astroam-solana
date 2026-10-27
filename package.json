@@ -17,9 +17,10 @@
     "waitlist:export": "node --experimental-strip-types scripts/export-waitlist.ts"
   },
   "dependencies": {
+    "@libsql/client": "^0.18.0",
+    "@solana/web3.js": "1.98.4",
     "axios": "1.20.0",
     "dotenv": "17.4.2",
-    "@solana/web3.js": "1.98.4",
     "express": "5.2.1",
     "zod": "4.6.5"
   },

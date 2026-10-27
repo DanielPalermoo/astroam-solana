@@ -32,21 +32,28 @@ function parseArgs(): { outFile?: string } {
   return {}
 }
 
-const { outFile } = parseArgs()
-const repo = new WaitlistRepository()
+async function main() {
+  const { outFile } = parseArgs()
+  const repo = new WaitlistRepository()
 
-try {
-  const count = repo.getCount()
-  const csv = repo.toCsv()
+  try {
+    const count = await repo.getCount()
+    const csv = await repo.toCsv()
 
-  if (outFile) {
-    const resolved = path.resolve(outFile)
-    fs.mkdirSync(path.dirname(resolved), { recursive: true })
-    fs.writeFileSync(resolved, csv, 'utf-8')
-    console.log(`Exported ${count} waitlist entries to ${resolved}`)
-  } else {
-    process.stdout.write(csv)
+    if (outFile) {
+      const resolved = path.resolve(outFile)
+      fs.mkdirSync(path.dirname(resolved), { recursive: true })
+      fs.writeFileSync(resolved, csv, 'utf-8')
+      console.log(`Exported ${count} waitlist entries to ${resolved}`)
+    } else {
+      process.stdout.write(csv)
+    }
+  } finally {
+    repo.close()
   }
-} finally {
-  repo.close()
 }
+
+main().catch((err) => {
+  console.error('Failed to export waitlist:', err)
+  process.exit(1)
+})
