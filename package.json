@@ -13,7 +13,8 @@
     "solana:deploy": "node --experimental-strip-types scripts/deploy-solana-escrow.ts",
     "solana:upgrade": "node --experimental-strip-types scripts/deploy-solana-escrow.ts --upgrade",
     "real:check": "node --experimental-strip-types scripts/check-real-run.ts",
-    "meter:demo": "node src/meter/demo-meter.ts"
+    "meter:demo": "node src/meter/demo-meter.ts",
+    "waitlist:export": "node --experimental-strip-types scripts/export-waitlist.ts"
   },
   "dependencies": {
     "axios": "1.20.0",
