@@ -1,0 +1,33 @@
+name: Sync Fork with Upstream
+
+on:
+  schedule:
+    # Se ejecuta automáticamente cada hora
+    - cron: '0 * * * *'
+  # Permite ejecutarlo manualmente desde la pestaña Actions con un click
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Sync with Upstream
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git remote add upstream https://github.com/FrancoDuran23/astroam-solana.git
+          git fetch upstream
+          git checkout main
+          git merge upstream/main --ff-only || git merge upstream/main -m "chore: sync upstream"
+          git push origin main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
