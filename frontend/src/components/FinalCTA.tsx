@@ -20,26 +20,26 @@ export default function FinalCTA() {
 
     if (!fullName.trim() || fullName.trim().length < 2) {
       setStatus('error')
-      setErrorMessage('Por favor ingresa tu nombre completo.')
+      setErrorMessage('Please enter your full name.')
       return
     }
 
     if (!phone.trim() || phone.trim().length < 6) {
       setStatus('error')
-      setErrorMessage('Por favor ingresa un número de celular o WhatsApp válido.')
+      setErrorMessage('Please enter a valid mobile or WhatsApp number.')
       return
     }
 
     const trimmedEmail = email.trim()
     if (!trimmedEmail || !trimmedEmail.includes('@')) {
       setStatus('error')
-      setErrorMessage('Por favor ingresa un correo electrónico válido.')
+      setErrorMessage('Please enter a valid email address.')
       return
     }
 
     if (!countryOrigin.trim() || countryOrigin.trim().length < 2) {
       setStatus('error')
-      setErrorMessage('Por favor indica tu país o ciudad de residencia.')
+      setErrorMessage('Please enter your country or city of residence.')
       return
     }
 
@@ -62,12 +62,12 @@ export default function FinalCTA() {
         setStatus('success')
       } else {
         setStatus('error')
-        setErrorMessage(res.message || 'No se pudo unir a la lista de espera.')
+        setErrorMessage(res.message || 'Could not join the waitlist. Please try again.')
       }
     } catch (err) {
       setStatus('error')
       setErrorMessage(
-        err instanceof Error ? err.message : 'Error inesperado de red al conectar con el servidor.'
+        err instanceof Error ? err.message : 'Unexpected network error connecting to the server.'
       )
     }
   }
@@ -134,12 +134,12 @@ export default function FinalCTA() {
 
               <div>
                 <h3 className="font-display text-2xl font-bold text-textprimary">
-                  {isAlreadyRegistered ? '¡Ya estás en órbita!' : `¡Bienvenido a bordo, ${fullName.split(' ')[0]}!`}
+                  {isAlreadyRegistered ? "You're already in orbit!" : `Welcome aboard, ${fullName.split(' ')[0]}!`}
                 </h3>
                 <p className="text-sm text-textsecondary mt-2 leading-relaxed max-w-md font-sans">
                   {isAlreadyRegistered
-                    ? 'Tu lugar ya estaba reservado en la lista de espera de AstroAm. Te contactaremos con prioridad tan pronto comience el despegue de la beta privada.'
-                    : 'Tu solicitud de acceso prioritario a la beta privada ha sido confirmada con éxito. Hemos registrado tu perfil para los cupos de prueba.'}
+                    ? "Your spot is already reserved on the AstroAm waitlist. We will reach out with priority as soon as the private beta takes off."
+                    : "Your priority access request for the private beta has been confirmed. We have registered your profile for the test cohort."}
                 </p>
               </div>
 
@@ -162,12 +162,12 @@ export default function FinalCTA() {
                 className="opacity-0 absolute -left-[9999px] w-0 h-0 pointer-events-none"
               />
 
-              {/* Row 1: Nombre completo y Celular */}
+              {/* Row 1: Full name & Phone */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
                     <span className="material-symbols-outlined notranslate text-xs text-primaryviolet">person</span>
-                    Nombre completo
+                    Full name
                   </label>
                   <input
                     type="text"
@@ -186,7 +186,7 @@ export default function FinalCTA() {
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
                     <span className="material-symbols-outlined notranslate text-xs text-primaryviolet">phone_iphone</span>
-                    Celular / WhatsApp
+                    Mobile / WhatsApp
                   </label>
                   <input
                     type="tel"
@@ -203,11 +203,11 @@ export default function FinalCTA() {
                 </div>
               </div>
 
-              {/* Row 2: Correo electrónico */}
+              {/* Row 2: Email address */}
               <div className="flex flex-col gap-1.5">
                 <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
                   <span className="material-symbols-outlined notranslate text-xs text-primaryviolet">alternate_email</span>
-                  Correo electrónico
+                  Email address
                 </label>
                 <input
                   type="email"
@@ -223,12 +223,12 @@ export default function FinalCTA() {
                 />
               </div>
 
-              {/* Row 3: De dónde eres y Próximo viaje */}
+              {/* Row 3: Where based & Next trip */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
                     <span className="material-symbols-outlined notranslate text-xs text-tealbrand">public</span>
-                    ¿De dónde eres?
+                    Where are you based?
                   </label>
                   <input
                     type="text"
@@ -237,7 +237,7 @@ export default function FinalCTA() {
                       setCountryOrigin(e.target.value)
                       if (status === 'error') setStatus('idle')
                     }}
-                    placeholder="Argentina / México / España..."
+                    placeholder="Argentina / United States / Spain..."
                     required
                     disabled={status === 'loading'}
                     className="w-full bg-[#0E0C2C]/80 border border-cardborder text-textprimary placeholder:text-textsecondary/50 focus:border-tealbrand focus:ring-1 focus:ring-tealbrand rounded-xl px-4 py-3 font-sans text-sm outline-none transition-all duration-200 disabled:opacity-60"
@@ -247,7 +247,7 @@ export default function FinalCTA() {
                 <div className="flex flex-col gap-1.5">
                   <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
                     <span className="material-symbols-outlined notranslate text-xs text-tealbrand">flight_takeoff</span>
-                    ¿Dónde es tu próximo viaje? <span className="text-[10px] text-textsecondary/60 lowercase">(opcional)</span>
+                    Where is your next trip? <span className="text-[10px] text-textsecondary/60 lowercase">(optional)</span>
                   </label>
                   <input
                     type="text"
@@ -256,7 +256,7 @@ export default function FinalCTA() {
                       setNextDestination(e.target.value)
                       if (status === 'error') setStatus('idle')
                     }}
-                    placeholder="Japón, Europa, EE. UU..."
+                    placeholder="Japan, Europe, USA..."
                     disabled={status === 'loading'}
                     className="w-full bg-[#0E0C2C]/80 border border-cardborder text-textprimary placeholder:text-textsecondary/50 focus:border-tealbrand focus:ring-1 focus:ring-tealbrand rounded-xl px-4 py-3 font-sans text-sm outline-none transition-all duration-200 disabled:opacity-60"
                   />
@@ -291,11 +291,11 @@ export default function FinalCTA() {
                         d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                       />
                     </svg>
-                    <span>REGISTRANDO EN ÓRBITA...</span>
+                    <span>REGISTERING IN ORBIT...</span>
                   </>
                 ) : (
                   <>
-                    <span>SOLICITAR ACCESO BETA PRIVADA</span>
+                    <span>REQUEST PRIVATE BETA ACCESS</span>
                     <span className="material-symbols-outlined notranslate text-sm">rocket_launch</span>
                   </>
                 )}

@@ -56,7 +56,7 @@ export function createWaitlistRouter(waitlistRepo?: WaitlistRepository): Router 
         res.status(200).json({
           status: 'ok',
           alreadyRegistered: false,
-          message: '¡Te has unido a la lista de espera con éxito!',
+          message: 'You have successfully joined the waitlist!',
         })
         return
       }
@@ -73,7 +73,7 @@ export function createWaitlistRouter(waitlistRepo?: WaitlistRepository): Router 
         res.status(200).json({
           status: 'ok',
           alreadyRegistered: true,
-          message: 'Ya estas a bordo!',
+          message: "You're already aboard!",
         })
         return
       }
@@ -81,7 +81,7 @@ export function createWaitlistRouter(waitlistRepo?: WaitlistRepository): Router 
       res.status(201).json({
         status: 'ok',
         alreadyRegistered: false,
-        message: '¡Te has unido a la lista de espera con éxito!',
+        message: 'You have successfully joined the waitlist!',
       })
     } catch (err) {
       res.status(400).json({
