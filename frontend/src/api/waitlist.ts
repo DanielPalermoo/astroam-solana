@@ -35,8 +35,8 @@ export async function joinWaitlist(data: WaitlistJoinRequest): Promise<WaitlistJ
       const message =
         result?.message ||
         (res.status === 429
-          ? 'Demasiadas solicitudes. Por favor intenta más tarde.'
-          : 'No se pudo unir a la lista de espera. Verifica tus datos e intenta de nuevo.')
+          ? 'Too many requests. Please try again later.'
+          : 'Could not join the waitlist. Please check your details and try again.')
       return {
         status: 'error',
         message,
@@ -46,7 +46,7 @@ export async function joinWaitlist(data: WaitlistJoinRequest): Promise<WaitlistJ
     return {
       status: 'ok',
       alreadyRegistered: Boolean(result?.alreadyRegistered),
-      message: result?.message || '¡Te has unido a la lista de espera con éxito!',
+      message: result?.message || 'You have successfully joined the waitlist!',
     }
   } catch (err) {
     return {
@@ -54,7 +54,7 @@ export async function joinWaitlist(data: WaitlistJoinRequest): Promise<WaitlistJ
       message:
         err instanceof Error
           ? err.message
-          : 'Error de conexión. Asegúrate de tener conexión e intenta de nuevo.',
+          : 'Connection error. Please check your connection and try again.',
     }
   }
 }

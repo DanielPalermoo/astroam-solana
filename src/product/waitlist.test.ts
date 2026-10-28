@@ -169,7 +169,7 @@ describe('Waitlist API Routes', () => {
     const body = (await res.json()) as { status: string; alreadyRegistered: boolean; message: string }
     assert.equal(body.status, 'ok')
     assert.equal(body.alreadyRegistered, false)
-    assert.equal(body.message, '¡Te has unido a la lista de espera con éxito!')
+    assert.equal(body.message, 'You have successfully joined the waitlist!')
   })
 
   test('POST /api/waitlist with duplicate email returns 200 and alreadyRegistered: true', async () => {
@@ -188,7 +188,7 @@ describe('Waitlist API Routes', () => {
     const body = (await res.json()) as { status: string; alreadyRegistered: boolean; message: string }
     assert.equal(body.status, 'ok')
     assert.equal(body.alreadyRegistered, true)
-    assert.equal(body.message, 'Ya estas a bordo!')
+    assert.equal(body.message, "You're already aboard!")
   })
 
   test('POST /api/waitlist with honeypot silently discards without saving to DB', async () => {
@@ -210,7 +210,7 @@ describe('Waitlist API Routes', () => {
     const body = (await res.json()) as { status: string; alreadyRegistered: boolean; message: string }
     assert.equal(body.status, 'ok')
     assert.equal(body.alreadyRegistered, false)
-    assert.equal(body.message, '¡Te has unido a la lista de espera con éxito!')
+    assert.equal(body.message, 'You have successfully joined the waitlist!')
 
     // DB count should not have increased
     assert.equal(await repo.getCount(), countBefore)
