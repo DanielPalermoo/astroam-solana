@@ -1,7 +1,11 @@
 import { envConfig } from '../config/env'
 
 export interface WaitlistJoinRequest {
+  fullName: string
+  phone: string
   email: string
+  countryOrigin: string
+  nextDestination?: string
   honeypot?: string
   source?: string
 }
@@ -13,7 +17,7 @@ export interface WaitlistJoinResponse {
 }
 
 /**
- * Register an email for the AstroAm private beta waitlist.
+ * Register for the AstroAm private beta waitlist.
  */
 export async function joinWaitlist(data: WaitlistJoinRequest): Promise<WaitlistJoinResponse> {
   try {
@@ -32,7 +36,7 @@ export async function joinWaitlist(data: WaitlistJoinRequest): Promise<WaitlistJ
         result?.message ||
         (res.status === 429
           ? 'Demasiadas solicitudes. Por favor intenta más tarde.'
-          : 'No se pudo unir a la lista de espera. Verifica tu correo e intenta de nuevo.')
+          : 'No se pudo unir a la lista de espera. Verifica tus datos e intenta de nuevo.')
       return {
         status: 'error',
         message,
@@ -50,7 +54,7 @@ export async function joinWaitlist(data: WaitlistJoinRequest): Promise<WaitlistJ
       message:
         err instanceof Error
           ? err.message
-          : 'Error de conexión. Por favor verifica tu red e intenta de nuevo.',
+          : 'Error de conexión. Asegúrate de tener conexión e intenta de nuevo.',
     }
   }
 }

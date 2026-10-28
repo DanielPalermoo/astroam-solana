@@ -17,56 +17,91 @@ class MockMissionRepo implements MissionRepository {
   async findAll(): Promise<ProductMission[]> { return [] }
 }
 
-describe('WaitlistRepository (node:sqlite)', () => {
-  test('adds entries idempotently and normalizes emails', () => {
+describe('WaitlistRepository (node:sqlite / memory)', () => {
+  test('adds entries idempotently and normalizes emails', async () => {
     const repo = new WaitlistRepository(':memory:')
     try {
-      assert.equal(repo.getCount(), 0)
+      assert.equal(await repo.getCount(), 0)
 
       // 1. Add new entry
-      const r1 = repo.addEntry('  Cosmo@AstroAm.io ', 'landing_header')
+      const r1 = await repo.addEntry({
+        fullName: 'Cosmo Kramer',
+        phone: '+1 555-0199',
+        email: '  Cosmo@AstroAm.io ',
+        countryOrigin: 'USA',
+        nextDestination: 'Japan',
+        source: 'landing_header',
+      })
       assert.equal(r1.alreadyRegistered, false)
+      assert.equal(r1.full_name, 'Cosmo Kramer')
+      assert.equal(r1.phone, '+1 555-0199')
       assert.equal(r1.email, 'cosmo@astroam.io')
+      assert.equal(r1.country_origin, 'USA')
+      assert.equal(r1.next_destination, 'Japan')
       assert.equal(r1.source, 'landing_header')
       assert.ok(r1.id)
       assert.ok(r1.created_at)
-      assert.equal(repo.getCount(), 1)
+      assert.equal(await repo.getCount(), 1)
 
       // 2. Duplicate entry with different case/trimming
-      const r2 = repo.addEntry('COSMO@astroam.io', 'landing_footer')
+      const r2 = await repo.addEntry({
+        fullName: 'Cosmo Kramer Different Name',
+        phone: '+1 555-9999',
+        email: 'COSMO@astroam.io',
+        countryOrigin: 'Canada',
+        source: 'landing_footer',
+      })
       assert.equal(r2.alreadyRegistered, true)
       assert.equal(r2.id, r1.id)
       assert.equal(r2.email, 'cosmo@astroam.io')
-      assert.equal(repo.getCount(), 1)
+      assert.equal(await repo.getCount(), 1)
 
       // 3. Add second unique email
-      const r3 = repo.addEntry('pilot@solana.org')
+      const r3 = await repo.addEntry({
+        fullName: 'Pilot Dave',
+        phone: '+54 11 4444-5555',
+        email: 'pilot@solana.org',
+        countryOrigin: 'Argentina',
+      })
       assert.equal(r3.alreadyRegistered, false)
       assert.equal(r3.email, 'pilot@solana.org')
       assert.equal(r3.source, null)
-      assert.equal(repo.getCount(), 2)
+      assert.equal(await repo.getCount(), 2)
 
       // 4. getAll
-      const all = repo.getAll()
+      const all = await repo.getAll()
       assert.equal(all.length, 2)
       assert.equal(all[0].email, 'cosmo@astroam.io')
       assert.equal(all[1].email, 'pilot@solana.org')
 
       // 5. toCsv
-      const csv = repo.toCsv()
-      assert.ok(csv.startsWith('id,email,created_at,source\n'))
+      const csv = await repo.toCsv()
+      assert.ok(csv.startsWith('id,full_name,phone,email,country_origin,next_destination,created_at,source\n'))
       assert.ok(csv.includes('cosmo@astroam.io'))
+      assert.ok(csv.includes('Cosmo Kramer'))
+      assert.ok(csv.includes('+1 555-0199'))
       assert.ok(csv.includes('pilot@solana.org'))
     } finally {
       repo.close()
     }
   })
 
-  test('escapes special characters in CSV correctly', () => {
+  test('escapes special characters in CSV correctly', async () => {
     const repo = new WaitlistRepository(':memory:')
     try {
-      repo.addEntry('quote@test.com', 'has "quotes" and, commas')
-      const csv = repo.toCsv()
+      await repo.addEntry({
+        fullName: 'John "The Boss" Doe',
+        phone: '+1-234,567',
+        email: 'quote@test.com',
+        countryOrigin: 'City, Country',
+        nextDestination: 'A "Fancy" Place',
+        source: 'has "quotes" and, commas',
+      })
+      const csv = await repo.toCsv()
+      assert.ok(csv.includes('"John ""The Boss"" Doe"'))
+      assert.ok(csv.includes('"+1-234,567"'))
+      assert.ok(csv.includes('"City, Country"'))
+      assert.ok(csv.includes('"A ""Fancy"" Place"'))
       assert.ok(csv.includes('"has ""quotes"" and, commas"'))
     } finally {
       repo.close()
@@ -116,11 +151,18 @@ describe('Waitlist API Routes', () => {
     })
   })
 
-  test('POST /api/waitlist with valid email returns 201', async () => {
+  test('POST /api/waitlist with valid data returns 201', async () => {
     const res = await fetch(`${baseUrl}/api/waitlist`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'explorer@orbit.dev', source: 'hero_cta' }),
+      body: JSON.stringify({
+        fullName: 'Elena Rostova',
+        phone: '+54 9 11 3333-2222',
+        email: 'explorer@orbit.dev',
+        countryOrigin: 'Argentina',
+        nextDestination: 'Spain',
+        source: 'hero_cta',
+      }),
     })
 
     assert.equal(res.status, 201)
@@ -134,7 +176,12 @@ describe('Waitlist API Routes', () => {
     const res = await fetch(`${baseUrl}/api/waitlist`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'EXPLORER@orbit.dev' }),
+      body: JSON.stringify({
+        fullName: 'Elena Rostova',
+        phone: '+54 9 11 3333-2222',
+        email: 'EXPLORER@orbit.dev',
+        countryOrigin: 'Argentina',
+      }),
     })
 
     assert.equal(res.status, 200)
@@ -145,13 +192,16 @@ describe('Waitlist API Routes', () => {
   })
 
   test('POST /api/waitlist with honeypot silently discards without saving to DB', async () => {
-    const countBefore = repo.getCount()
+    const countBefore = await repo.getCount()
 
     const res = await fetch(`${baseUrl}/api/waitlist`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
+        fullName: 'Bot User',
+        phone: '12345678',
         email: 'spammer-bot@botnet.ai',
+        countryOrigin: 'Unknown',
         honeypot: 'i-am-a-bot',
       }),
     })
@@ -163,14 +213,19 @@ describe('Waitlist API Routes', () => {
     assert.equal(body.message, '¡Te has unido a la lista de espera con éxito!')
 
     // DB count should not have increased
-    assert.equal(repo.getCount(), countBefore)
+    assert.equal(await repo.getCount(), countBefore)
   })
 
   test('POST /api/waitlist with invalid email returns 400', async () => {
     const res = await fetch(`${baseUrl}/api/waitlist`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: 'not-an-email' }),
+      body: JSON.stringify({
+        fullName: 'Test User',
+        phone: '12345678',
+        email: 'not-an-email',
+        countryOrigin: 'Chile',
+      }),
     })
 
     assert.equal(res.status, 400)
@@ -184,7 +239,7 @@ describe('Waitlist API Routes', () => {
     assert.equal(res.status, 200)
     const body = (await res.json()) as { count: number }
     assert.equal(typeof body.count, 'number')
-    assert.equal(body.count, repo.getCount())
+    assert.equal(body.count, await repo.getCount())
   })
 
   test('GET /api/waitlist/export rejects unauthorized requests (no secret / bad secret)', async () => {
@@ -215,8 +270,9 @@ describe('Waitlist API Routes', () => {
     assert.ok(res.headers.get('content-disposition')?.includes('filename="waitlist.csv"'))
 
     const csvText = await res.text()
-    assert.ok(csvText.startsWith('id,email,created_at,source\n'))
+    assert.ok(csvText.startsWith('id,full_name,phone,email,country_origin,next_destination,created_at,source\n'))
     assert.ok(csvText.includes('explorer@orbit.dev'))
+    assert.ok(csvText.includes('Elena Rostova'))
   })
 
   test('GET /api/waitlist/export succeeds with secret query parameter', async () => {
@@ -226,6 +282,7 @@ describe('Waitlist API Routes', () => {
     assert.equal(res.headers.get('content-type'), 'text/csv; charset=utf-8')
     const csvText = await res.text()
     assert.ok(csvText.includes('explorer@orbit.dev'))
+    assert.ok(csvText.includes('Elena Rostova'))
   })
 
   test('Standalone router endpoints match /count and /export', async () => {

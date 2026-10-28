@@ -4,18 +4,42 @@ import mascotSrc from '../assets/mascot.webp'
 import { joinWaitlist } from '../api/waitlist'
 
 export default function FinalCTA() {
+  const [fullName, setFullName] = useState('')
+  const [phone, setPhone] = useState('')
   const [email, setEmail] = useState('')
+  const [countryOrigin, setCountryOrigin] = useState('')
+  const [nextDestination, setNextDestination] = useState('')
   const [honeypot, setHoneypot] = useState('')
+
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
   const [isAlreadyRegistered, setIsAlreadyRegistered] = useState(false)
   const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    const trimmed = email.trim()
-    if (!trimmed || !trimmed.includes('@')) {
+
+    if (!fullName.trim() || fullName.trim().length < 2) {
+      setStatus('error')
+      setErrorMessage('Por favor ingresa tu nombre completo.')
+      return
+    }
+
+    if (!phone.trim() || phone.trim().length < 6) {
+      setStatus('error')
+      setErrorMessage('Por favor ingresa un número de celular o WhatsApp válido.')
+      return
+    }
+
+    const trimmedEmail = email.trim()
+    if (!trimmedEmail || !trimmedEmail.includes('@')) {
       setStatus('error')
       setErrorMessage('Por favor ingresa un correo electrónico válido.')
+      return
+    }
+
+    if (!countryOrigin.trim() || countryOrigin.trim().length < 2) {
+      setStatus('error')
+      setErrorMessage('Por favor indica tu país o ciudad de residencia.')
       return
     }
 
@@ -24,7 +48,11 @@ export default function FinalCTA() {
 
     try {
       const res = await joinWaitlist({
-        email: trimmed,
+        fullName: fullName.trim(),
+        phone: phone.trim(),
+        email: trimmedEmail,
+        countryOrigin: countryOrigin.trim(),
+        nextDestination: nextDestination.trim() || undefined,
         honeypot: honeypot.trim() || undefined,
         source: 'web_final_cta',
       })
@@ -95,7 +123,7 @@ export default function FinalCTA() {
         </p>
 
         {/* Waitlist Form or Success Card */}
-        <div className="w-full max-w-lg mt-2">
+        <div className="w-full max-w-xl mt-2">
           {status === 'success' ? (
             <div className="p-6 sm:p-8 rounded-3xl bg-warmneutral/95 border border-tealbrand/50 shadow-[0_0_50px_rgba(47,208,221,0.25)] backdrop-blur-xl flex flex-col items-center text-center gap-4 transition-all">
               <div className="w-16 h-16 rounded-full bg-tealbrand/15 border border-tealbrand/60 flex items-center justify-center text-tealbrand shadow-[0_0_30px_rgba(47,208,221,0.4)]">
@@ -106,12 +134,12 @@ export default function FinalCTA() {
 
               <div>
                 <h3 className="font-display text-2xl font-bold text-textprimary">
-                  {isAlreadyRegistered ? '¡Ya estás en órbita!' : '¡Bienvenido a bordo!'}
+                  {isAlreadyRegistered ? '¡Ya estás en órbita!' : `¡Bienvenido a bordo, ${fullName.split(' ')[0]}!`}
                 </h3>
                 <p className="text-sm text-textsecondary mt-2 leading-relaxed max-w-md font-sans">
                   {isAlreadyRegistered
-                    ? 'Tu nave ya estaba reservada en la lista de espera de AstroAm. Te contactaremos tan pronto comience el despegue de la beta privada.'
-                    : 'Tu acceso prioritario a la beta privada ha sido confirmado. Hemos guardado tu asiento en la cabina de AstroAm.'}
+                    ? 'Tu lugar ya estaba reservado en la lista de espera de AstroAm. Te contactaremos con prioridad tan pronto comience el despegue de la beta privada.'
+                    : 'Tu solicitud de acceso prioritario a la beta privada ha sido confirmada con éxito. Hemos registrado tu perfil para los cupos de prueba.'}
                 </p>
               </div>
 
@@ -121,7 +149,7 @@ export default function FinalCTA() {
               </div>
             </div>
           ) : (
-            <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3">
+            <form onSubmit={handleSubmit} className="w-full flex flex-col gap-3.5 text-left bg-warmneutral/80 border border-cardborder/80 backdrop-blur-xl p-5 sm:p-7 rounded-3xl shadow-[0_0_40px_rgba(106,69,255,0.15)]">
               {/* Anti-bot Honeypot input */}
               <input
                 type="text"
@@ -134,66 +162,148 @@ export default function FinalCTA() {
                 className="opacity-0 absolute -left-[9999px] w-0 h-0 pointer-events-none"
               />
 
-              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <div className="relative flex-1">
-                  <span className="material-symbols-outlined notranslate absolute left-4 top-1/2 -translate-y-1/2 text-textsecondary/60 text-lg pointer-events-none">
-                    alternate_email
-                  </span>
+              {/* Row 1: Nombre completo y Celular */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
+                    <span className="material-symbols-outlined notranslate text-xs text-primaryviolet">person</span>
+                    Nombre completo
+                  </label>
                   <input
-                    type="email"
-                    value={email}
+                    type="text"
+                    value={fullName}
                     onChange={(e) => {
-                      setEmail(e.target.value)
+                      setFullName(e.target.value)
                       if (status === 'error') setStatus('idle')
                     }}
-                    placeholder="traveler@solana.space"
+                    placeholder="Satoshi Nakamoto"
                     required
                     disabled={status === 'loading'}
-                    className="w-full bg-warmneutral/90 border border-cardborder text-textprimary placeholder:text-textsecondary/60 focus:border-tealbrand focus:ring-1 focus:ring-tealbrand rounded-full pl-11 pr-5 py-3.5 font-sans text-sm outline-none transition-all duration-200 disabled:opacity-60"
+                    className="w-full bg-[#0E0C2C]/80 border border-cardborder text-textprimary placeholder:text-textsecondary/50 focus:border-tealbrand focus:ring-1 focus:ring-tealbrand rounded-xl px-4 py-3 font-sans text-sm outline-none transition-all duration-200 disabled:opacity-60"
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={status === 'loading'}
-                  className="px-7 py-3.5 rounded-full bg-gradient-to-r from-primaryviolet to-primaryviolet-hover hover:from-primaryviolet-hover hover:to-primaryviolet text-white font-sans font-semibold text-xs tracking-wider uppercase shadow-[0_0_24px_rgba(123,92,255,0.5)] hover:shadow-[0_0_36px_rgba(123,92,255,0.8)] active:scale-95 disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer shrink-0"
-                >
-                  {status === 'loading' ? (
-                    <>
-                      <svg
-                        className="animate-spin h-4 w-4 text-white"
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                      >
-                        <circle
-                          className="opacity-25"
-                          cx="12"
-                          cy="12"
-                          r="10"
-                          stroke="currentColor"
-                          strokeWidth="4"
-                        />
-                        <path
-                          className="opacity-75"
-                          fill="currentColor"
-                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                        />
-                      </svg>
-                      <span>JOINING...</span>
-                    </>
-                  ) : (
-                    <>
-                      <span>JOIN BETA WAITLIST</span>
-                      <span className="material-symbols-outlined notranslate text-sm">arrow_forward</span>
-                    </>
-                  )}
-                </button>
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
+                    <span className="material-symbols-outlined notranslate text-xs text-primaryviolet">phone_iphone</span>
+                    Celular / WhatsApp
+                  </label>
+                  <input
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => {
+                      setPhone(e.target.value)
+                      if (status === 'error') setStatus('idle')
+                    }}
+                    placeholder="+1 555-0199"
+                    required
+                    disabled={status === 'loading'}
+                    className="w-full bg-[#0E0C2C]/80 border border-cardborder text-textprimary placeholder:text-textsecondary/50 focus:border-tealbrand focus:ring-1 focus:ring-tealbrand rounded-xl px-4 py-3 font-sans text-sm outline-none transition-all duration-200 disabled:opacity-60"
+                  />
+                </div>
               </div>
+
+              {/* Row 2: Correo electrónico */}
+              <div className="flex flex-col gap-1.5">
+                <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
+                  <span className="material-symbols-outlined notranslate text-xs text-primaryviolet">alternate_email</span>
+                  Correo electrónico
+                </label>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value)
+                    if (status === 'error') setStatus('idle')
+                  }}
+                  placeholder="traveler@solana.space"
+                  required
+                  disabled={status === 'loading'}
+                  className="w-full bg-[#0E0C2C]/80 border border-cardborder text-textprimary placeholder:text-textsecondary/50 focus:border-tealbrand focus:ring-1 focus:ring-tealbrand rounded-xl px-4 py-3 font-sans text-sm outline-none transition-all duration-200 disabled:opacity-60"
+                />
+              </div>
+
+              {/* Row 3: De dónde eres y Próximo viaje */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
+                    <span className="material-symbols-outlined notranslate text-xs text-tealbrand">public</span>
+                    ¿De dónde eres?
+                  </label>
+                  <input
+                    type="text"
+                    value={countryOrigin}
+                    onChange={(e) => {
+                      setCountryOrigin(e.target.value)
+                      if (status === 'error') setStatus('idle')
+                    }}
+                    placeholder="Argentina / México / España..."
+                    required
+                    disabled={status === 'loading'}
+                    className="w-full bg-[#0E0C2C]/80 border border-cardborder text-textprimary placeholder:text-textsecondary/50 focus:border-tealbrand focus:ring-1 focus:ring-tealbrand rounded-xl px-4 py-3 font-sans text-sm outline-none transition-all duration-200 disabled:opacity-60"
+                  />
+                </div>
+
+                <div className="flex flex-col gap-1.5">
+                  <label className="text-xs font-mono uppercase tracking-wider text-textsecondary font-medium flex items-center gap-1.5">
+                    <span className="material-symbols-outlined notranslate text-xs text-tealbrand">flight_takeoff</span>
+                    ¿Dónde es tu próximo viaje? <span className="text-[10px] text-textsecondary/60 lowercase">(opcional)</span>
+                  </label>
+                  <input
+                    type="text"
+                    value={nextDestination}
+                    onChange={(e) => {
+                      setNextDestination(e.target.value)
+                      if (status === 'error') setStatus('idle')
+                    }}
+                    placeholder="Japón, Europa, EE. UU..."
+                    disabled={status === 'loading'}
+                    className="w-full bg-[#0E0C2C]/80 border border-cardborder text-textprimary placeholder:text-textsecondary/50 focus:border-tealbrand focus:ring-1 focus:ring-tealbrand rounded-xl px-4 py-3 font-sans text-sm outline-none transition-all duration-200 disabled:opacity-60"
+                  />
+                </div>
+              </div>
+
+              {/* Submit button */}
+              <button
+                type="submit"
+                disabled={status === 'loading'}
+                className="w-full mt-2 py-4 rounded-xl bg-gradient-to-r from-primaryviolet via-primaryviolet-hover to-primaryviolet text-white font-sans font-bold text-xs sm:text-sm tracking-wider uppercase shadow-[0_0_24px_rgba(123,92,255,0.5)] hover:shadow-[0_0_36px_rgba(123,92,255,0.8)] active:scale-[0.99] disabled:opacity-70 disabled:cursor-not-allowed transition-all duration-200 flex items-center justify-center gap-2 cursor-pointer"
+              >
+                {status === 'loading' ? (
+                  <>
+                    <svg
+                      className="animate-spin h-4 w-4 text-white"
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      />
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      />
+                    </svg>
+                    <span>REGISTRANDO EN ÓRBITA...</span>
+                  </>
+                ) : (
+                  <>
+                    <span>SOLICITAR ACCESO BETA PRIVADA</span>
+                    <span className="material-symbols-outlined notranslate text-sm">rocket_launch</span>
+                  </>
+                )}
+              </button>
 
               {/* Error message */}
               {status === 'error' && errorMessage && (
-                <div className="flex items-center justify-center gap-2 text-xs font-mono text-alerta bg-alerta/10 border border-alerta/30 rounded-full px-4 py-2 mt-1">
+                <div className="flex items-center justify-center gap-2 text-xs font-mono text-alerta bg-alerta/10 border border-alerta/30 rounded-xl px-4 py-2.5 mt-1">
                   <span className="material-symbols-outlined notranslate text-sm">warning</span>
                   <span>{errorMessage}</span>
                 </div>
